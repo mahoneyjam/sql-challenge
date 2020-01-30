@@ -1,24 +1,18 @@
+DROP TABLE IF EXISTS department;
+DROP TABLE IF EXISTS dept_emp;
+DROP TABLE IF EXISTS dept_manager;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS salaries;
+DROP TABLE IF EXISTS titles;
+
+
 CREATE TABLE department (
-  dept_id character varying(20) NOT NULL,
+  dept_id character varying(20) primary key NOT NULL,
   dept_name character varying(45) NOT NULL
 );
 
-CREATE TABLE dept_emp (
-	emp_no integer NOT NULL,
-	dept_no character varying(20) NOT NULL,
-	from_date character varying(45) NOT NULL,
-	to_date character varying(45) NOT NULL
-);
-
-CREATE TABLE dept_manager (
-	dept_no character varying(20) NOT NULL,
-	emp_no integer NOT NULL,
-	from_date character varying(45) NOT NULL,
-	to_date character varying(45) NOT NULL
-);
-
 CREATE TABLE employees (
-	emp_no integer NOT NULL,
+	emp_no integer primary key NOT NULL,
 	birth_date character varying(45) NOT NULL,
 	first_name character varying(45) NOT NULL,
 	last_name character varying(45) NOT NULL,
@@ -26,25 +20,50 @@ CREATE TABLE employees (
 	hire_date character varying(45) NOT NULL
 );
 
-CREATE TABLE salaries (
+CREATE TABLE dept_emp (
+	id SERIAL PRIMARY KEY,
 	emp_no integer NOT NULL,
+	dept_no character varying(20) NOT NULL,
+	from_date character varying(45) NOT NULL,
+	to_date character varying(45) NOT NULL,
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
+	FOREIGN KEY (dept_no) REFERENCES department(dept_id)
+);
+
+CREATE TABLE dept_manager (
+	id SERIAL PRIMARY KEY,
+	dept_no character varying(20) NOT NULL,
+	emp_no integer NOT NULL,
+	from_date character varying(45) NOT NULL,
+	to_date character varying(45) NOT NULL,
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
+	FOREIGN KEY (dept_no) REFERENCES department(dept_id)
+);
+
+
+CREATE TABLE salaries (
+	id SERIAL PRIMARY KEY,
+	emp_no integer NULL,
 	salary integer NOT NULL,
 	from_date character varying(45) NOT NULL,
-	to_date character varying(45) NOT NULL
+	to_date character varying(45) NOT NULL,
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no)
 );
 
 CREATE TABLE titles (
+	id SERIAL PRIMARY KEY,
 	emp_no integer NOT NULL,
 	title character varying(45) NOT NULL,
 	from_date character varying(45) NOT NULL,
-	to_date character varying(45) NOT NULL
+	to_date character varying(45) NOT NULL,
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no)
 );
 
 --Check to ensure data imported
 select * from department;
+select * from employees;
 select * from dept_emp;
 select * from dept_manager;
-select * from employees;
 select * from salaries;
 select * from titles;
 
